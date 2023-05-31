@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: montserrat;
+      background:  rgb(164, 203, 208);
+    }
+
+    div#loading{
+      display: none;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+
+    }
+    .ring{
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      animation: ring 2s linear infinite;
+    }
+    @keyframes ring {
+      0%{
+        transform: rotate(0deg);
+        box-shadow: 1px 5px 2px #e65c00;
+      }
+      50%{
+        transform: rotate(180deg);
+        box-shadow: 1px 5px 2px #18b201;
+      }
+      100%{
+        transform: rotate(360deg);
+        box-shadow: 1px 5px 2px #0456c8;
+      }
+    }
+    .ring:before{
+      position: absolute;
+      content: '';
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 5px rgba(255,255,255,.3);
+    }
+    span{
+      color: #737373;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      line-height: 200px;
+      animation: text 3s ease-in-out infinite;
+    }
+    @keyframes text {
+      50%{
+        color: black;
+      }
+    }
+
+    
+
+    h1 {
+      color: blue;
+      text-align: center;
+      font-size: 40px;
+      /* border-bottom: 4px; */
+    }
+
+    .upload_video {
+      background-color: rgb(116, 202, 211);
+      padding: 2vi;
+    }
+
+    .result {
+      height: 200px;
+      width: 47%;
+      background-color: rgb(116, 202, 211);
+      margin-left: 25%;
+      margin-top: 3%;
+      padding: 20px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      /* background-color: #15317E; */
+      /* width: 100%; */
+      height: 35px;
+      margin-left: 23%;
+    }
+
+    .video_heading {
+      /* text-align: center; */
+      font-size: 25px;
+      color: blue;
+      font-weight: 400;
+      margin: auto;
+      display: inline-block;
+      text-align: center;
+
+
+    }
+
+    .result_heading {
+      /* text-align: center; */
+      font-size: 25px;
+      color: blue;
+      font-weight: 400;
+      margin-left: 44%;
+      /* margin-top: 20px; */
+    }
+
+
+    .custom-file-upload { 
+      /* padding: 6px 12px; */
+      cursor: pointer;
+      height: 5vh;
+      width: 50vb;
+      margin: auto;
+      display: block;
+
+      background-color: rgb(245, 245, 245);
+    }
+
+    .button {
+      display: inline-block;
+      /* padding: 6px 12px; */
+      cursor: pointer;
+      height: 40px;
+      width: 180px;
+      margin-top: 2vh;
+      color: white;
+    }
+
+
+
+
+    .curr_text {
+      text-align: center;
+      color: black;
+      margin: auto;
+      margin-top: 5px;
+    }
+
+    
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      width: 50%;
+      margin-left: 25%;
+      margin-top: 3%;
+      height: 25px;
+      color: blue;
+      text-align: center;
+    }
+  </style>
+
+  <script>
+    function showLoader() {
+      window.location.href = "loader.html"; // Redirect to the loader.html page
+    }
+
+    function toggleDiv() {
+      var div = document.getElementById("loading");
+      div.style.display = "flex";
+      var div1 = document.getElementById("content");
+      div1.style.display = "none";
+  }
+
+
+  </script>
+
+
+</head>
+
+<body>
+
+
+  <div>
+    <h1>Gait Based Human Indentification System</h1>
+    <div class="upload_video container" style ="text-align:center;">
+      
+      <!-- action="/submit"  method="post"-->
+      <form  onsubmit="showLoader()" action="/submit"   method="post"  enctype="multipart/form-data">
+        <label for="myfile_id" class="form-label video_heading">Upload Your Video</label><br><br>
+        <input class=" form-control form-control-md custom-file-upload" id="myfile_id" type="file" name="myfile" accept=".avi" />
+
+
+        <button type="submit"  class="btn btn-primary button" onclick="toggleDiv()">Submit</button>
+      </form>
+
+    </div>
+
+    
+    <div class="result container">
+      <div id="loading">
+        <div class="ring"></div>
+        <span>Processing...</span>
+      </div>
+      <div id = "content">
+        <label class="result_heading">RESULT</label>
+        <div class="table_class">
+          {% if result == 1 %}
+          <table>
+            <tr>
+              <th>Human Id(Prediction)</th>
+              <th>Frames (in %)</th>
+            </tr>
+            {% for i in range(0,1) %}
+            <tr>
+              <td>{{info[0][0]}} </td>
+              <td>{{info[0][1]}} </td>
+            </tr>
+            {% endfor %}
+          </table>
+          {% endif %}
+
+          {% if result == 0 %}
+          <table>
+            <tr>
+              <th>Human Id(Prediction)</th>
+              <th>Frames (in %)</th>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+
+          </table>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; Copyright 2023. Developed by Himanshu Kumar (CSB19062), Pranav Kumar (CSB19065) and Sibam Kumar
+        (CSB19021).</p>
+    </div>
+  </div>
+
+ 
+</body>
+
+</html>
